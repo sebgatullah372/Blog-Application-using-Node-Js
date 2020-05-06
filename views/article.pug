@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    .jumbotron
+        h4=art.title
+        h5=art.author
+        p=art.body
+    a.btn.btn-primary(href='/article/edit/'+art._id) Edit
+    a.btn.btn-danger.delete-article(href='#',data-id=art._id) Delete
