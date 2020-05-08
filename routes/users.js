@@ -21,21 +21,32 @@ router.post('/signup',
   check('email', 'Enter a valid Email').isEmail(),
   check('username', 'Username is Required').not().isEmpty(),
   check('password', 'Password is Required').not().isEmpty(),
-  check('password').isLength({ min: 8 }).withMessage('must be at least 8 chars long')
-  .matches(/\d/).withMessage('must contain a number'),
+  check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 chars long')
+  .matches(/\d/).withMessage('Password must contain a number'),
   check('conpass', 'Confirmation of Password is Required').not().isEmpty()
   ],(req, res, next)=> {
     const errors = validationResult(req);
     var err = errors.errors;
     //console.log(err);
-    if (err !== null) {
+    if (err.length == 0) {
       //console.log('Here');
-      res.render('signup_form', {
-        title: 'Sign Up Here',
-        errors: err
-    });
+      
+    var salt = bcrypt.genSaltSync(10);
+      var hash = bcrypt.hashSync(req.body.password, salt);
+      req.body.password= hash;
+      //console.log(hash);
+      User.create(req.body)
+      .then((users)=>{
+        //console.log(users);
+        res.statusCode = 200;
+        res.setHeader('Content-type', 'text/html');  
+       req.flash('success', "You have Signed Up!!");
+       res.redirect('/users/signup'); 
+          
+       },(err)=>next(err))
+       .catch((err)=>next(err));
     }
-    else{
+    
       
       /*bcrypt.genSalt(10, function(err, salt){
         bcrypt.hash(req.body.password, salt, function(err, hash){
@@ -48,19 +59,15 @@ router.post('/signup',
       
        
      });*/
-      var salt = bcrypt.genSaltSync(10);
-      var hash = bcrypt.hashSync(req.body.password, salt);
-      req.body.password= hash;
-      User.create(req.body)
-      .then((users)=>{
-       res.statusCode = 200;
-       res.setHeader('Content-type', 'text/html');
-       req.flash('success', "You have Signed Up!!");
-       res.redirect('/users/signup');      
-       },(err)=>next(err))
-       .catch((err)=>next(err));
+      else{
+        res.render('signup_form', {
+          title: 'Sign Up Here',
+          errors: err
+      });
+      }
+      
     
-    } 
+    
 });
 
 router.get('/login', (req, res ,next)=>{
