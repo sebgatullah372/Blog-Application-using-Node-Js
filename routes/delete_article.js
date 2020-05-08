@@ -16,6 +16,7 @@ router.delete('/:articleId', (req,res,next)=>{
         res.statusCode = 200;
         res.setHeader('Content-type', 'text/html');
         //res.json(articles);
+        req.flash('danger', "Article Deleted");
         res.send('Deleted');      
     },(err)=>next(err))
     .catch((err)=>next(err));

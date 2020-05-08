@@ -1,0 +1,25 @@
+extends layout
+  
+block content
+    h1= title
+    form.col-md-6(method= 'POST')
+        #form-group
+            label First Name
+            input.form-control(name='firstname', type='text', placeholder='First Name')
+        #form-group
+            label Last Name
+            input.form-control(name='lastname', type='text', placeholder='Last Name')
+            #form-group
+            label Email
+            input.form-control(name='email', type='text', placeholder='Email')
+        #form-group
+            label Username
+            input.form-control(name='username', type='text', placeholder='Username')
+            #form-group
+            label Password
+            input.form-control(name='password', type='password', placeholder='Password')
+        #form-group
+            label Confirm Password
+            input.form-control(name='conpass', type='password', placeholder='Confirm Password')
+        br
+        input.btn.btn-success(type='submit', name='submit')

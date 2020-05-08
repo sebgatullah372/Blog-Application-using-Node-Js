@@ -1,0 +1,15 @@
+extends layout
+  
+block content
+    h1= title
+    form.col-md-6(method= 'POST')
+        
+        #form-group
+            label Username
+            input.form-control(name='username', type='text', placeholder='Username')
+            #form-group
+            label Password
+            input.form-control(name='password', type='password', placeholder='Password')
+        
+        br
+        input.btn.btn-success(type='submit', name='submit')

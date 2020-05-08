@@ -45,6 +45,7 @@ router.get('/:articleId', (req, res ,next)=>{
         res.statusCode = 200;
         res.setHeader('Content-type', 'text/html');
         //res.json(articles);
+        req.flash('success', "Article Updated!");
         res.redirect('/');      
     },(err)=>next(err))
     .catch((err)=>next(err));
