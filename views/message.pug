@@ -2,3 +2,4 @@
   each type in Object.keys(messages)
       each message in messages[type]
         div(class="alert alert-"+ type) #{message}
+          button.btn.btn-primary(id="cross" style="margin-left: 850px;") Ok

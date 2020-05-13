@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var session = require('express-session');
+var passport = require('passport');
+var authenticate = require('./authenticate')(passport);
 
 //var flash = require('connect-flash');
 
@@ -49,6 +51,15 @@ app.use(function (req, res, next) {
   next();
 });
 
+//Passport Configurtion
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.get('*', function(req, res, next){
+  res.locals.user = req.user || null;
+  next(); 
+})
 app.use(bodyparser.json());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

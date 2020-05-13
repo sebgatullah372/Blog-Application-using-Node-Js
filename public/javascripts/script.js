@@ -16,3 +16,14 @@ $(document).ready(function(){
     });
   });
 });
+
+$(document).ready(function(){
+  $('#cross').on('click', function(){
+    $.ajax({
+      url:'/',
+      success: location.reload()
+    });
+    
+
+  });
+});
