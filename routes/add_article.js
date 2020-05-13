@@ -1,6 +1,7 @@
 var express = require('express');
 var Articles = require('../models/article');
 const bodyparser = require('body-parser');
+
 const { check, validationResult } = require('express-validator');
 
 //var flash = require('connect-flash');
@@ -9,16 +10,25 @@ var router = express.Router();
 router.use(express.urlencoded({ extended: false }));
 
 router.use(bodyparser.json());
+var verifyUser = (req, res, next)=>{
+  if(req.isAuthenticated()){
+      return next();
+  }
+  else{
+      req.flash('danger', 'Please Login');
+      res.redirect('/users/login');
+  }
+}
 
-router.get('/add', (req, res ,next)=>{
+router.get('/add', verifyUser, (req, res ,next)=>{
      res.render('add_article', {
          title: 'Add Article'
      })
 })
 
 
-router.post('/add', [check('title', 'Title is Required').not().isEmpty(),
-check('author', 'Author is Required').not().isEmpty(),
+router.post('/add', verifyUser, [check('title', 'Title is Required').not().isEmpty(),
+//check('author', 'Author is Required').not().isEmpty(),
 check('body', 'Body is Required').not().isEmpty()
 ],(req, res, next)=> {
   const errors = validationResult(req);
@@ -29,6 +39,7 @@ check('body', 'Body is Required').not().isEmpty()
     
    //console.log('if');
   // return;
+  req.body.author = req.user._id;
   Articles.create(req.body)
   .then((articles)=>{
     
@@ -52,5 +63,7 @@ check('body', 'Body is Required').not().isEmpty()
 
   //console.log('Here');
 });
-//5eb0310f5681c35171d79b57
+
+
+
 module.exports = router;

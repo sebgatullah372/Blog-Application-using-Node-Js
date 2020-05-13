@@ -6,10 +6,22 @@ var router = express.Router();
 router.use(express.urlencoded({ extended: false }));
 
 router.use(bodyparser.json());
-
-router.get('/:articleId', (req, res ,next)=>{
+var verifyUser = (req, res, next)=>{
+    if(req.isAuthenticated()){
+        return next();
+    }
+    else{
+        req.flash('danger', 'Please Login');
+        res.redirect('/users/login');
+    }
+  }
+router.get('/:articleId',verifyUser, (req, res ,next)=>{
     Articles.findById(req.params.articleId)
     .then((article)=>{
+        if(article.author != req.user._id){
+            req.flash('danger', 'Not Authorized!!');
+            res.redirect('/');
+        }
         res.statusCode= 200;
         res.setHeader('Content-type','text/html');
         res.render('edit_article', {
@@ -33,11 +45,10 @@ router.get('/:articleId', (req, res ,next)=>{
     .catch((err)=>next(err));
 
 })*/
-.post('/:articleId', (req, res, next)=> {
+.post('/:articleId', verifyUser, (req, res, next)=> {
 
     var article = {};
     article.title = req.body.title;
-    article.author = req.body.author;
     article.body = req.body.body;
     var query = {_id: req.params.articleId}
     Articles.update(query , article)

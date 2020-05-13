@@ -14,8 +14,9 @@ html
             a.nav-link(href='/')
               | Home 
               span.sr-only (current)
-          li.nav-item
-            a.nav-link(href='/articles/add') Add Articles
+          if user    
+            li.nav-item
+              a.nav-link(href='/articles/add') Add Articles
         ul.nav.navbar-nav.navbar-right
           if user
             li.nav-item
@@ -28,8 +29,10 @@ html
               a.nav-link(href='/users/login') Login
             
     .container
-     
+      
       != messages('message', locals)
+      if user
+        h3 Welcome #{user.firstname}
       if errors
         each error,i in errors
           div(class="alert alert-danger") #{error.msg}
