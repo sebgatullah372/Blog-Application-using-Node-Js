@@ -2,10 +2,39 @@ extends layout
 
 block content
     .jumbotron
-        h4=art.title
-        h5 Written by #{author}
+        h5=art.title
+        h6 Written by #{author}
         p=art.body
     if user
         if user.id == art.author 
             a.btn.btn-primary(href='/article/edit/'+art._id) Edit
             a.btn.btn-danger.delete-article(href='#',data-id=art._id) Delete
+    .row
+        .col-sm-2(style='background-color:lavender;')
+            table.table.table-hover
+                thead
+                    tr
+                        th User
+                tbody
+                each writer, i in writers
+                    tr
+                        td=writer
+                    
+        .col-sm-10(style='background-color:lavenderblush;')
+            table.table.table-striped
+                thead
+                    tr
+                        th Comments
+                tbody
+                each comment, i in comments 
+                    tr
+                        td=comment.comment
+
+    
+    if user
+        form.col-md-6(method= 'POST' action= '/article/'+art._id+'/comment')
+            #form-group
+                label Your Comment
+                textarea.form-control(name='comment')
+            br
+            input.btn.btn-success(type='submit', name='submit')

@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const commentSchema = new Schema({
+    comment: {
+        type: String
+    },
+    writer:{
+        type: String
+    }
+})
 const articleSchema = new Schema({
     title: {
         type: String
@@ -10,7 +17,8 @@ const articleSchema = new Schema({
     },
     body:{
         type: String
-    } 
+    },
+    comments:[commentSchema] 
 });
 
 var Articles = mongoose.model('Article', articleSchema);

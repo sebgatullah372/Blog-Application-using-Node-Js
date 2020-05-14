@@ -13,9 +13,11 @@ var authenticate = require('./authenticate')(passport);
 var bodyparser = require('body-parser');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+
 var addarticleRouter = require('./routes/add_article');
 var fullarticleRouter = require('./routes/article');
 var deleteRouter = require('./routes/delete_article');
+//var comment = require('./routes/comments');
 const url = 'mongodb://localhost:27017/Blog';
 
 var connect = mongoose.connect(url);
@@ -66,7 +68,7 @@ app.use('/users', usersRouter);
 app.use('/articles/', addarticleRouter);
 app.use('/article/', fullarticleRouter);
 app.use('/article/', deleteRouter);
-
+//app.use('/article/', comment);
 
 
 // catch 404 and forward to error handler
